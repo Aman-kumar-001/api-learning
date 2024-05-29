@@ -9,9 +9,25 @@ const users = [
     { id: 3, name: 'Jim Brown', age: 35 },
 ];
 
-// Endpoint to get all users
+// Endpoint to get all users with optional filters
 app.get('/users', (req, res) => {
-    res.json(users);
+    let filteredUsers = users;
+
+    // Filter by name if provided
+    if (req.query.name) {
+        filteredUsers = filteredUsers.filter(user => 
+            user.name.toLowerCase().includes(req.query.name.toLowerCase())
+        );
+    }
+
+    // Filter by age if provided
+    if (req.query.age) {
+        filteredUsers = filteredUsers.filter(user => 
+            user.age === parseInt(req.query.age)
+        );
+    }
+
+    res.json(filteredUsers);
 });
 
 app.listen(port, () => {
